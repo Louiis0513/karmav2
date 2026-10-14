@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Nunito", Arial, sans-serif;
     background-color: #f5f0fa;
     color: #3d3150;
 }
@@ -107,10 +107,404 @@ body {
     color: #3d3150;
 }
 
+.mensaje {
+    background-color: #c8f0c5;
+    color: #3d3150;
+    text-align: center;
+    padding: 15px;
+}
+
 .pie {
     background-color: #6c4a9e;
     color: white;
     text-align: center;
     padding: 25px;
     margin-top: 20px;
+}
+/* ===== Menu publico ===== */
+.nav-publica {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: white;
+    border-bottom: 1.5px solid #e4d9f2;
+    padding: 8px 40px;
+}
+
+.nav-publica a {
+    color: #3d3150;
+}
+
+.nav-publica a:hover {
+    color: #6c4a9e;
+}
+
+.nav-publica .nav-marca {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-size: 26px;
+    color: #6c4a9e;
+    letter-spacing: 1px;
+}
+
+.nav-marca img {
+    height: 64px;
+    margin-right: 2px;
+}
+
+.nav-links a {
+    margin: 0 0 0 28px;
+}
+
+/* ===== Portada ===== */
+.portada {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.portada h1,
+.portada h2,
+.portada h3 {
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    color: #3d3150;
+}
+
+.portada h2 {
+    font-size: 36px;
+    margin-bottom: 35px;
+}
+
+.portada section {
+    margin-top: 100px;
+}
+
+.portada img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+/* Hero */
+.portada .portada-hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 60px;
+    align-items: center;
+    margin-top: 60px;
+}
+
+.portada-etiqueta {
+    color: #6c4a9e;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 13px;
+}
+
+.portada-hero h1 {
+    font-size: 58px;
+    line-height: 1.05;
+    font-weight: 800;
+    margin: 15px 0 20px;
+}
+
+.resaltado {
+    color: #6c4a9e;
+    background: linear-gradient(transparent 62%, #b9ef9c 62%);
+}
+
+.portada-hero-texto > p:not(.portada-etiqueta) {
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 500px;
+}
+
+.portada-buscador {
+    display: flex;
+    margin-top: 30px;
+    max-width: 520px;
+    background: white;
+    border: 2px solid #3d3150;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.portada-buscador input {
+    flex: 1;
+    border: none;
+    padding: 16px 18px;
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+}
+
+.portada-buscador button {
+    border: none;
+    background: #6c4a9e;
+    color: white;
+    padding: 0 24px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.portada-buscador button:hover {
+    background: #573a82;
+}
+
+.portada-materias-rapidas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.portada-materias-rapidas a {
+    color: #3d3150;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 7px 16px;
+    border: 1.5px solid #cbb8e6;
+    border-radius: 30px;
+}
+
+.portada-materias-rapidas a:hover {
+    background: #c8f0c5;
+    border-color: #c8f0c5;
+}
+
+.portada-hero-imagen {
+    position: relative;
+}
+
+.portada-hero-imagen img {
+    position: relative;
+    height: 460px;
+    border-radius: 200px 200px 24px 24px;
+    z-index: 1;
+}
+
+/* Formas tomadas del logo: destellos de cuatro puntas y circulos */
+.destello {
+    position: absolute;
+    clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+    z-index: 2;
+}
+
+.destello-grande {
+    width: 70px;
+    height: 70px;
+    background: #b57be6;
+    top: -20px;
+    left: -25px;
+}
+
+.destello-pequeno {
+    width: 42px;
+    height: 42px;
+    background: #7b7fe0;
+    bottom: 30px;
+    right: -18px;
+}
+
+.circulo {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.circulo-verde {
+    width: 130px;
+    height: 130px;
+    background: #b9ef9c;
+    bottom: -30px;
+    left: -35px;
+}
+
+/* Como funciona */
+.portada-pasos-lista {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.portada-paso {
+    border-top: 2px solid #3d3150;
+    padding-top: 20px;
+}
+
+.portada-paso-numero {
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+    font-weight: 800;
+    font-size: 44px;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #6c4a9e;
+}
+
+.portada-paso h3 {
+    font-size: 22px;
+    margin: 8px 0;
+}
+
+.portada-paso p {
+    line-height: 1.6;
+}
+
+/* Materias */
+.portada-materias-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.portada-materia {
+    display: block;
+    text-decoration: none;
+    color: #3d3150;
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1.5px solid #e4d9f2;
+    transition: transform 0.2s;
+}
+
+.portada-materia:nth-child(4n+1) { background: #c8f0c5; border-color: #c8f0c5; }
+.portada-materia:nth-child(4n+2) { background: #e4d9f2; border-color: #e4d9f2; }
+.portada-materia:nth-child(4n+3) { background: #dcdcf7; border-color: #dcdcf7; }
+
+.portada-materia:hover {
+    transform: translateY(-4px);
+}
+
+.portada-materia h3 {
+    font-size: 24px;
+}
+
+.portada-materia p {
+    margin: 6px 0 28px;
+}
+
+.portada-materia span {
+    font-weight: 700;
+    color: #6c4a9e;
+}
+
+/* Por que KARMA */
+.portada .portada-confianza {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 50px;
+    align-items: center;
+    background: #3d3150;
+    color: #efe8f8;
+    border-radius: 30px;
+    padding: 50px;
+}
+
+.portada-confianza img {
+    height: 380px;
+    border-radius: 20px;
+}
+
+.portada-confianza h2,
+.portada-confianza h3 {
+    color: white;
+}
+
+.portada-confianza h2 {
+    margin-bottom: 20px;
+}
+
+.portada-razon {
+    padding: 16px 0;
+    border-bottom: 1px solid #5c4d73;
+}
+
+.portada-razon:last-child {
+    border-bottom: none;
+}
+
+.portada-razon h3 {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.portada-razon h3::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 10px;
+    background: #b9ef9c;
+    clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+}
+
+/* Nosotros */
+.portada .portada-nosotros {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.portada-nosotros h2 {
+    margin-bottom: 15px;
+}
+
+.portada-nosotros > p {
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.portada-equipo {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.portada-equipo li {
+    background: white;
+    border: 1.5px solid #e4d9f2;
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-weight: 600;
+}
+
+.portada-ubicacion {
+    margin-top: 25px !important;
+    font-size: 15px !important;
+    color: #6c4a9e;
+    font-weight: 700;
+}
+
+@media (max-width: 850px) {
+    .portada .portada-hero,
+    .portada .portada-confianza,
+    .portada-pasos-lista {
+        grid-template-columns: 1fr;
+    }
+
+    .portada-hero h1 {
+        font-size: 42px;
+    }
+
+    .portada-hero-imagen img {
+        height: 340px;
+    }
+
+    .portada .portada-confianza {
+        padding: 30px;
+    }
+
+    .nav-links a {
+        margin: 0 0 0 16px;
+    }
 }
