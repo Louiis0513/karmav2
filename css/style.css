@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f0fa;
+    color: #3d3150;
+}
+
+.nav {
+    background-color: #6c4a9e;
+    padding: 20px;
+    text-align: center;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    font-weight: bold;
+}
+
+.nav a:hover {
+    color: #c8f0c5;
+}
+
+.inicio {
+    background-color: #d9f2d5;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.inicio h1 {
+    color: #6c4a9e;
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.inicio h2 {
+    color: #4f3975;
+    margin-bottom: 20px;
+}
+
+.inicio p {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    font-size: 18px;
+}
+
+.boton {
+    display: inline-block;
+    background-color: #6c4a9e;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.boton:hover {
+    background-color: #8564b5;
+}
+
+
+.seccion {
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.seccion h2 {
+    color: #6c4a9e;
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+.seccion p {
+    max-width: 700px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+.contenedor-tarjetas {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.tarjeta {
+    background-color: #c8f0c5;
+    width: 280px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(108, 74, 158, 0.2);
+}
+
+.tarjeta h3 {
+    color: #6c4a9e;
+    margin-bottom: 15px;
+}
+
+.tarjeta p {
+    color: #3d3150;
+}
+
+.pie {
+    background-color: #6c4a9e;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    margin-top: 20px;
+}
