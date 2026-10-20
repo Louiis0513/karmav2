@@ -7,7 +7,6 @@ function adminLogueado() {
     return isset($_SESSION["admin"]);
 }
 
-// Todas las pantallas de admin/ la llaman al inicio: sin sesión, vuelven al login.
 function requiereAdmin() {
     if (!adminLogueado()) {
         header("Location: login.php");
@@ -15,7 +14,6 @@ function requiereAdmin() {
     }
 }
 
-// Mensaje "flash": se guarda antes de redirigir y se muestra una sola vez.
 function guardarMensaje($texto) {
     $_SESSION["mensaje"] = $texto;
 }
@@ -24,4 +22,30 @@ function obtenerMensaje() {
     $mensaje = $_SESSION["mensaje"] ?? "";
     unset($_SESSION["mensaje"]);
     return $mensaje;
+}
+
+function telefonoValido($telefono) {
+    return (bool)preg_match('/^3\d{9}$/', (string)$telefono);
+}
+
+function rutaFoto($ruta, $fallback = "img/estudiantes.jpg") {
+    $ruta = trim((string)$ruta);
+    if ($ruta === "") {
+        return $fallback;
+    }
+    return $ruta;
+}
+
+function whatsappUrl($telefono, $mensaje = "") {
+    $url = "https://wa.me/57" . preg_replace('/\D+/', '', (string)$telefono);
+    if ($mensaje !== "") {
+        $url .= "?text=" . rawurlencode($mensaje);
+    }
+    return $url;
+}
+
+function contador($mysqli, $sql) {
+    $resultado = $mysqli->query($sql);
+    $fila = $resultado->fetch_row();
+    return (int)($fila[0] ?? 0);
 }
