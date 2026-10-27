@@ -29,6 +29,7 @@ $adminNombre = $_SESSION["admin"]["nombre"] ?? "Admin";
                 <a href="materias.php" class="<?= $paginaActual === 'materias.php' ? 'activo' : '' ?>">Materias</a>
                 <a href="tutores.php" class="<?= in_array($paginaActual, ['tutores.php', 'tutor_form.php'], true) ? 'activo' : '' ?>">Tutores</a>
                 <a href="solicitudes.php" class="<?= $paginaActual === 'solicitudes.php' ? 'activo' : '' ?>">Solicitudes</a>
+                <a href="estudiantes.php" class="<?= $paginaActual === 'estudiantes.php' ? 'activo' : '' ?>">Alumnos</a>
                 <a href="../index.php" target="_blank" rel="noopener">Ver sitio</a>
                 <a href="logout.php" class="nav-salir">Salir</a>
             </div>

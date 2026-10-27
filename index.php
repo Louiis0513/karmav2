@@ -3,16 +3,13 @@ session_start();
 require_once __DIR__ . "/includes/conexion.php";
 require_once __DIR__ . "/includes/funciones.php";
 
-$resultado = $mysqli->query(
-    "SELECT m.id_materia, m.nombre, m.imagen, m.descripcion, COUNT(t.id_tutor) AS tutores
-     FROM materia m
-     LEFT JOIN tutor t ON t.id_materia = m.id_materia AND t.verificado = 1
-     GROUP BY m.id_materia, m.nombre, m.imagen, m.descripcion
-     ORDER BY m.nombre"
-);
-$materias = $resultado->fetch_all(MYSQLI_ASSOC);
+enviarHeadersCache('publico');
 
-$totalTutores = contador($mysqli, "SELECT COUNT(*) FROM tutor WHERE verificado = 1");
+$materias = obtenerMateriasHome($mysqli);
+$totalTutores = 0;
+foreach ($materias as $m) {
+    $totalTutores += (int) ($m['tutores'] ?? 0);
+}
 $totalMaterias = count($materias);
 $totalSolicitudes = contador($mysqli, "SELECT COUNT(*) FROM solicitud");
 
@@ -74,7 +71,7 @@ require __DIR__ . "/includes/header.php";
             <div class="portada-paso">
                 <span class="portada-paso-numero">03</span>
                 <h3>Escríbele</h3>
-                <p>Contáctalo por WhatsApp o deja tu solicitud con tu duda y tu teléfono.</p>
+                <p>Regístrate como alumno, abre el chat con tu tutor y acuerda tema, horario y modalidad. También puedes usar WhatsApp.</p>
             </div>
         </div>
     </section>
@@ -140,6 +137,11 @@ require __DIR__ . "/includes/header.php";
             <li>Angie Carolina Castilla Ovalle</li>
             <li>Maria Jose Alvarez Garcia</li>
         </ul>
+
+        <div class="form-acciones" style="justify-content:center;margin-top:1.5rem">
+            <a class="btn" href="registro.php">Registrarme como alumno</a>
+            <a class="btn btn-secundario" href="registro.php?tipo=tutor">Quiero ser tutor</a>
+        </div>
 
         <p id="ubicacion" class="portada-ubicacion">Bogotá, Colombia · Ficha 3260309</p>
     </section>

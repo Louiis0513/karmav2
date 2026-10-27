@@ -3,16 +3,12 @@ session_start();
 require_once __DIR__ . "/includes/conexion.php";
 require_once __DIR__ . "/includes/funciones.php";
 
+enviarHeadersCache('privado');
+
 $idTutor = isset($_GET["id_tutor"]) ? (int)$_GET["id_tutor"] : (int)($_POST["id_tutor"] ?? 0);
 $error = "";
 
-$tutores = $mysqli->query(
-    "SELECT t.id_tutor, t.nombre, m.nombre AS materia
-     FROM tutor t
-     INNER JOIN materia m ON m.id_materia = t.id_materia
-     WHERE t.verificado = 1
-     ORDER BY t.nombre"
-)->fetch_all(MYSQLI_ASSOC);
+$tutores = obtenerTutores($mysqli);
 
 $tutorSeleccionado = null;
 foreach ($tutores as $t) {
@@ -20,6 +16,15 @@ foreach ($tutores as $t) {
         $tutorSeleccionado = $t;
         break;
     }
+}
+
+$alumnoSesion = null;
+if (estudianteLogueado()) {
+    $stmtA = $mysqli->prepare("SELECT nombre, telefono FROM estudiante WHERE id_estudiante = ? LIMIT 1");
+    $stmtA->bind_param("i", $_SESSION["estudiante"]["id"]);
+    $stmtA->execute();
+    $alumnoSesion = $stmtA->get_result()->fetch_assoc();
+    $stmtA->close();
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -46,11 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (!$ok) {
             $error = "El tutor seleccionado no está disponible.";
         } else {
+            $idEstudiante = estudianteLogueado() ? (int)$_SESSION["estudiante"]["id"] : null;
             $stmt = $mysqli->prepare(
-                "INSERT INTO solicitud (nombre_estudiante, telefono_estudiante, descripcion_duda, fecha, medio, id_tutor)
-                 VALUES (?, ?, ?, CURDATE(), 'formulario', ?)"
+                "INSERT INTO solicitud (id_estudiante, nombre_estudiante, telefono_estudiante, descripcion_duda, fecha, medio, id_tutor)
+                 VALUES (?, ?, ?, ?, CURDATE(), 'formulario', ?)"
             );
-            $stmt->bind_param("sssi", $nombre, $telefono, $duda, $idTutor);
+            $stmt->bind_param("isssi", $idEstudiante, $nombre, $telefono, $duda, $idTutor);
             $stmt->execute();
             $stmt->close();
 
@@ -94,12 +100,12 @@ require __DIR__ . "/includes/header.php";
                     <div class="form-grupo">
                         <label for="nombre_estudiante">Tu nombre</label>
                         <input type="text" id="nombre_estudiante" name="nombre_estudiante" required maxlength="100"
-                               value="<?= e($_POST["nombre_estudiante"] ?? "") ?>" placeholder="Ej: Mariana López">
+                               value="<?= e($_POST["nombre_estudiante"] ?? ($alumnoSesion["nombre"] ?? "")) ?>" placeholder="Ej: Mariana López">
                     </div>
                     <div class="form-grupo">
                         <label for="telefono_estudiante">Teléfono / WhatsApp</label>
                         <input type="tel" id="telefono_estudiante" name="telefono_estudiante" required maxlength="10"
-                               value="<?= e($_POST["telefono_estudiante"] ?? "") ?>" placeholder="3001234567" inputmode="numeric">
+                               value="<?= e($_POST["telefono_estudiante"] ?? ($alumnoSesion["telefono"] ?? "")) ?>" placeholder="3001234567" inputmode="numeric">
                         <p class="form-ayuda">10 dígitos, empieza por 3.</p>
                     </div>
                     <div class="form-grupo">

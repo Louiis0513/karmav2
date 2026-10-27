@@ -1211,3 +1211,24 @@ table.tabla tr:hover td {
         transition: none !important;
     }
 }
+
+/* ——— Chat ——— */
+.lista-chats { display:grid; gap:.75rem; }
+.chat-item { display:flex; align-items:center; gap:.9rem; background:var(--white); border:1.5px solid var(--line); border-radius:var(--radius-lg); padding:1rem 1.1rem; box-shadow:var(--shadow-soft); color:var(--ink); }
+.chat-item:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+.chat-item-texto { flex:1; min-width:0; display:grid; }
+.chat-item-texto span { color:var(--muted); font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.chat-item-meta { display:grid; gap:.35rem; justify-items:end; }
+.chat-layout { display:grid; grid-template-columns:1.6fr .9fr; gap:1.25rem; align-items:start; }
+.chat-cabecera { display:flex; gap:.9rem; align-items:center; border-bottom:1px solid var(--line); padding-bottom:1rem; margin-bottom:1rem; }
+.chat-mensajes { display:flex; flex-direction:column; gap:.65rem; max-height:520px; overflow-y:auto; padding:.25rem; margin-bottom:1rem; }
+.burbuja { max-width:78%; padding:.7rem .95rem; border-radius:18px; box-shadow:var(--shadow-soft); }
+.burbuja p { color:var(--ink); white-space:pre-wrap; }
+.burbuja span { display:block; font-size:.75rem; color:var(--muted); margin-top:.3rem; text-align:right; }
+.burbuja.mia { align-self:flex-end; background:linear-gradient(135deg,var(--lavanda),var(--lavanda-mid)); border-bottom-right-radius:6px; }
+.burbuja.mia p, .burbuja.mia span { color:#fff; }
+.burbuja.suya { align-self:flex-start; background:var(--lavanda-mist); border-bottom-left-radius:6px; }
+.chat-form { display:flex; gap:.6rem; align-items:flex-end; }
+.chat-form textarea { flex:1; border:1.5px solid var(--lavanda-soft); border-radius:14px; padding:.75rem .95rem; background:var(--surface); resize:vertical; }
+.chat-form textarea:focus { border-color:var(--lavanda); background:#fff; outline:none; box-shadow:0 0 0 3px rgba(108,74,158,.14); }
+@media (max-width:850px){ .chat-layout{grid-template-columns:1fr} .burbuja{max-width:88%} .chat-form{flex-direction:column;align-items:stretch} }

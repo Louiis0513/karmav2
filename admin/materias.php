@@ -3,6 +3,7 @@ session_start();
 require_once __DIR__ . "/../includes/conexion.php";
 require_once __DIR__ . "/../includes/funciones.php";
 
+enviarHeadersCache('privado');
 requiereAdmin();
 
 $error = "";
@@ -24,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->bind_param("sss", $nombre, $descripcion, $imagen);
             try {
                 $stmt->execute();
+                cacheParcheMaterias($mysqli);
                 guardarMensaje("Materia creada correctamente.");
             } catch (mysqli_sql_exception $e) {
                 $error = "No se pudo crear. ¿El nombre ya existe?";
@@ -38,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->bind_param("sssi", $nombre, $descripcion, $imagen, $id);
             try {
                 $stmt->execute();
+                cacheParcheMaterias($mysqli, $id, $nombre, false);
                 guardarMensaje("Materia actualizada.");
             } catch (mysqli_sql_exception $e) {
                 $error = "No se pudo actualizar la materia.";
@@ -56,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->bind_param("i", $id);
         try {
             $stmt->execute();
+            cacheParcheMaterias($mysqli, $id, null, true);
             guardarMensaje("Materia eliminada.");
         } catch (mysqli_sql_exception $e) {
             guardarMensaje("No se puede eliminar: tiene tutores asignados.");

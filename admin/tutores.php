@@ -3,6 +3,7 @@ session_start();
 require_once __DIR__ . "/../includes/conexion.php";
 require_once __DIR__ . "/../includes/funciones.php";
 
+enviarHeadersCache('privado');
 requiereAdmin();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -10,33 +11,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = (int)($_POST["id_tutor"] ?? 0);
 
     if ($accion === "verificar" && $id > 0) {
+        $antes = cargarTutorConMateria($mysqli, $id);
         $valor = (int)($_POST["verificado"] ?? 0) === 1 ? 1 : 0;
         $stmt = $mysqli->prepare("UPDATE tutor SET verificado = ? WHERE id_tutor = ?");
         $stmt->bind_param("ii", $valor, $id);
         $stmt->execute();
         $stmt->close();
+        cacheParcheTutor($mysqli, $id, $antes);
         guardarMensaje($valor === 1 ? "Tutor verificado." : "Se quitó la verificación.");
         header("Location: tutores.php");
         exit;
     }
 
     if ($accion === "eliminar" && $id > 0) {
+        $antes = cargarTutorConMateria($mysqli, $id);
         $stmt = $mysqli->prepare("DELETE FROM tutor WHERE id_tutor = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->close();
+        cacheParcheTutorEliminado($mysqli, $id, $antes);
         guardarMensaje("Tutor eliminado.");
         header("Location: tutores.php");
         exit;
     }
 }
 
+$filtro = $_GET["filtro"] ?? "todos";
+$where = "";
+if ($filtro === "pendientes") $where = "WHERE t.verificado = 0";
+if ($filtro === "verificados") $where = "WHERE t.verificado = 1";
+if (!in_array($filtro, ["pendientes", "verificados"], true)) $filtro = "todos";
+
 $tutores = $mysqli->query(
     "SELECT t.*, m.nombre AS materia
      FROM tutor t
      INNER JOIN materia m ON m.id_materia = t.id_materia
-     ORDER BY t.verificado DESC, t.nombre"
+     $where
+     ORDER BY t.verificado ASC, t.nombre"
 )->fetch_all(MYSQLI_ASSOC);
+$pendientes = contador($mysqli, "SELECT COUNT(*) FROM tutor WHERE verificado = 0");
 
 $tituloPagina = "Tutores";
 require __DIR__ . "/../includes/header_admin.php";
@@ -49,6 +62,12 @@ require __DIR__ . "/../includes/header_admin.php";
         <p>Verifica perfiles, edita información o elimina tutores. Solo los verificados aparecen en el sitio público.</p>
     </div>
     <a class="btn" href="tutor_form.php">+ Nuevo tutor</a>
+</div>
+
+<div class="filtros" style="margin-bottom:1.25rem">
+    <a href="tutores.php" class="<?= $filtro === 'todos' ? 'activo' : '' ?>">Todos</a>
+    <a href="tutores.php?filtro=pendientes" class="<?= $filtro === 'pendientes' ? 'activo' : '' ?>">Pendientes de verificación<?= $pendientes > 0 ? " ($pendientes)" : "" ?></a>
+    <a href="tutores.php?filtro=verificados" class="<?= $filtro === 'verificados' ? 'activo' : '' ?>">Verificados</a>
 </div>
 
 <div class="panel-card">
@@ -74,7 +93,8 @@ require __DIR__ . "/../includes/header_admin.php";
                                     <img class="avatar-mini" src="../<?= e(rutaFoto($t["foto_url"])) ?>" alt="">
                                     <div>
                                         <strong><?= e($t["nombre"]) ?></strong><br>
-                                        <span style="color:var(--muted);font-size:0.9rem"><?= e($t["telefono"]) ?></span>
+                                        <span style="color:var(--muted);font-size:0.9rem"><?= e($t["telefono"]) ?><?= !empty($t["correo"]) ? " · " . e($t["correo"]) : " · Sin login" ?></span><br>
+                                        <span style="color:var(--muted);font-size:0.85rem"><?= e(formatoPrecio($t["precio_hora"] ?? null)) ?> · <?= e(etiquetaModalidad($t["modalidad"] ?? "virtual")) ?></span>
                                     </div>
                                 </div>
                             </td>

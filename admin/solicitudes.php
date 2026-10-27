@@ -2,12 +2,13 @@
 session_start();
 require_once __DIR__ . "/../includes/conexion.php";
 require_once __DIR__ . "/../includes/funciones.php";
+enviarHeadersCache('privado');
 
 requiereAdmin();
 
 $solicitudes = $mysqli->query(
     "SELECT s.id_solicitud, s.nombre_estudiante, s.telefono_estudiante, s.descripcion_duda,
-            s.fecha, s.medio, t.nombre AS tutor, m.nombre AS materia
+            s.fecha, s.medio, s.estado, t.nombre AS tutor, m.nombre AS materia
      FROM solicitud s
      INNER JOIN tutor t ON t.id_tutor = s.id_tutor
      INNER JOIN materia m ON m.id_materia = t.id_materia
@@ -22,7 +23,7 @@ require __DIR__ . "/../includes/header_admin.php";
     <div>
         <p class="etiqueta">Bandeja</p>
         <h1>Solicitudes de tutoría</h1>
-        <p>Listado de contactos recibidos por formulario o WhatsApp. Solo lectura.</p>
+        <p>Listado de contactos recibidos por formulario o WhatsApp. El tutor actualiza el estado desde su panel.</p>
     </div>
 </div>
 
@@ -39,6 +40,7 @@ require __DIR__ . "/../includes/header_admin.php";
                         <th>Tutor / Materia</th>
                         <th>Duda</th>
                         <th>Medio</th>
+                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,6 +61,7 @@ require __DIR__ . "/../includes/header_admin.php";
                                     <?= e(ucfirst($s["medio"])) ?>
                                 </span>
                             </td>
+                            <td><span class="badge <?= ($s["estado"] ?? "pendiente") === "aceptado" ? "badge-ok" : "badge-warn" ?>"><?= e(ucfirst($s["estado"] ?? "pendiente")) ?></span></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

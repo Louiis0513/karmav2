@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . "/../includes/conexion.php";
 require_once __DIR__ . "/../includes/funciones.php";
+enviarHeadersCache('privado');
 
 requiereAdmin();
 
@@ -10,6 +11,8 @@ $stats = [
     "tutores" => contador($mysqli, "SELECT COUNT(*) FROM tutor"),
     "verificados" => contador($mysqli, "SELECT COUNT(*) FROM tutor WHERE verificado = 1"),
     "solicitudes" => contador($mysqli, "SELECT COUNT(*) FROM solicitud"),
+    "pendientes" => contador($mysqli, "SELECT COUNT(*) FROM tutor WHERE verificado = 0"),
+    "estudiantes" => contador($mysqli, "SELECT COUNT(*) FROM estudiante"),
 ];
 
 $recientes = $mysqli->query(
@@ -42,6 +45,10 @@ require __DIR__ . "/../includes/header_admin.php";
     <div class="stat-card"><strong><?= $stats["verificados"] ?></strong><span>Tutores verificados</span></div>
     <div class="stat-card"><strong><?= $stats["solicitudes"] ?></strong><span>Solicitudes</span></div>
 </div>
+
+<?php if ($stats["pendientes"] > 0): ?>
+    <div class="alerta alerta-info">Hay <strong><?= $stats["pendientes"] ?></strong> tutor(es) pendiente(s) de verificación. <a href="tutores.php?filtro=pendientes">Revisarlos ahora</a> · Alumnos registrados: <strong><?= $stats["estudiantes"] ?></strong></div>
+<?php endif; ?>
 
 <div class="panel-card">
     <h2 style="margin-bottom:1rem">Últimas solicitudes</h2>

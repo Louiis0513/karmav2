@@ -3,43 +3,13 @@ session_start();
 require_once __DIR__ . "/includes/conexion.php";
 require_once __DIR__ . "/includes/funciones.php";
 
+enviarHeadersCache('publico');
+
 $materiaId = isset($_GET["materia"]) ? (int)$_GET["materia"] : 0;
 $buscar = trim((string)($_GET["buscar"] ?? ""));
 
-$materias = $mysqli->query("SELECT id_materia, nombre FROM materia ORDER BY nombre")->fetch_all(MYSQLI_ASSOC);
-
-$sql = "SELECT t.id_tutor, t.nombre, t.descripcion, t.disponibilidad, t.foto_url,
-               m.id_materia, m.nombre AS materia
-        FROM tutor t
-        INNER JOIN materia m ON m.id_materia = t.id_materia
-        WHERE t.verificado = 1";
-$tipos = "";
-$params = [];
-
-if ($materiaId > 0) {
-    $sql .= " AND t.id_materia = ?";
-    $tipos .= "i";
-    $params[] = $materiaId;
-}
-
-if ($buscar !== "") {
-    $sql .= " AND (t.nombre LIKE ? OR t.descripcion LIKE ? OR m.nombre LIKE ?)";
-    $tipos .= "sss";
-    $like = "%" . $buscar . "%";
-    $params[] = $like;
-    $params[] = $like;
-    $params[] = $like;
-}
-
-$sql .= " ORDER BY t.nombre";
-
-$stmt = $mysqli->prepare($sql);
-if ($tipos !== "") {
-    $stmt->bind_param($tipos, ...$params);
-}
-$stmt->execute();
-$tutores = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
+$materias = obtenerMaterias($mysqli);
+$tutores = obtenerTutores($mysqli, $materiaId, $buscar);
 
 $tituloPagina = "Tutores";
 require __DIR__ . "/includes/header.php";
@@ -90,6 +60,7 @@ require __DIR__ . "/includes/header.php";
                             <h3 style="margin-top:0.55rem"><?= e($t["nombre"]) ?></h3>
                             <p><?= e($t["descripcion"] ?? "") ?></p>
                             <p class="meta"><?= e($t["disponibilidad"]) ?></p>
+                            <p class="meta"><?= e(formatoPrecio($t["precio_hora"] ?? null)) ?> · <?= e(etiquetaModalidad($t["modalidad"] ?? "virtual")) ?></p>
                             <span class="card-enlace">Ver perfil →</span>
                         </div>
                     </a>

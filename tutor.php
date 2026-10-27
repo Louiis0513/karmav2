@@ -3,6 +3,8 @@ session_start();
 require_once __DIR__ . "/includes/conexion.php";
 require_once __DIR__ . "/includes/funciones.php";
 
+enviarHeadersCache('publico');
+
 $id = isset($_GET["id"]) ? (int)$_GET["id"] : 0;
 if ($id <= 0) {
     guardarMensaje("Tutor no encontrado.");
@@ -10,18 +12,7 @@ if ($id <= 0) {
     exit;
 }
 
-$stmt = $mysqli->prepare(
-    "SELECT t.id_tutor, t.nombre, t.descripcion, t.disponibilidad, t.telefono, t.foto_url,
-            m.nombre AS materia
-     FROM tutor t
-     INNER JOIN materia m ON m.id_materia = t.id_materia
-     WHERE t.id_tutor = ? AND t.verificado = 1
-     LIMIT 1"
-);
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$tutor = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+$tutor = obtenerTutorVerificado($mysqli, $id);
 
 if (!$tutor) {
     guardarMensaje("Ese tutor no está disponible o no está verificado.");
@@ -70,12 +61,27 @@ require __DIR__ . "/includes/header.php";
                         <?= e($tutor["materia"]) ?>
                     </div>
                     <div>
+                        <strong>Precio</strong>
+                        <?= e(formatoPrecio($tutor["precio_hora"] ?? null)) ?>
+                    </div>
+                    <div>
+                        <strong>Modalidad</strong>
+                        <?= e(etiquetaModalidad($tutor["modalidad"] ?? "virtual")) ?>
+                    </div>
+                    <div>
                         <strong>Estado</strong>
                         <span class="badge badge-ok">Verificado</span>
                     </div>
                 </div>
 
                 <div class="perfil-acciones">
+                    <?php if (estudianteLogueado()): ?>
+                        <a class="btn" href="chat.php?tutor=<?= (int)$tutor["id_tutor"] ?>">💬 Chatear y acordar tema</a>
+                    <?php elseif (tutorLogueado()): ?>
+                        <a class="btn" href="mis_chats.php">Ir a mis chats</a>
+                    <?php else: ?>
+                        <a class="btn" href="login.php">💬 Ingresa para chatear</a>
+                    <?php endif; ?>
                     <a class="btn btn-wa" href="tutor.php?id=<?= (int)$tutor["id_tutor"] ?>&wa=1">Contactar por WhatsApp</a>
                     <a class="btn" href="solicitud.php?id_tutor=<?= (int)$tutor["id_tutor"] ?>">Dejar solicitud</a>
                     <a class="btn btn-secundario" href="tutores.php">Ver más tutores</a>
